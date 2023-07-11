@@ -38,3 +38,39 @@ func NewBinaryTree() *BinaryNode {
 		},
 	}
 }
+
+func NewBinaryTreeTwo() *BinaryNode {
+	return &BinaryNode{
+		value: 20,
+		right: &BinaryNode{
+			value: 50,
+			left: &BinaryNode{
+				value: 30,
+				right: &BinaryNode{
+					value: 45,
+					right: &BinaryNode{
+						value: 49,
+					},
+				},
+				left: &BinaryNode{
+					value: 29,
+					left: &BinaryNode{
+						value: 21,
+					},
+				},
+			},
+		},
+		left: &BinaryNode{
+			value: 10,
+			right: &BinaryNode{
+				value: 15,
+			},
+			left: &BinaryNode{
+				value: 5,
+				right: &BinaryNode{
+					value: 7,
+				},
+			},
+		},
+	}
+}
