@@ -1,4 +1,4 @@
-package datastructures
+package lists
 
 import (
 	"github.com/stretchr/testify/assert"

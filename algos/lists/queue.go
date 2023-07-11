@@ -1,4 +1,4 @@
-package datastructures
+package lists
 
 type QNode struct {
 	value any
