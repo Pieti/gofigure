@@ -1,4 +1,4 @@
-package trees
+package main
 
 func PreOrderSearch(head *BinaryNode) *[]int {
 	var path []int

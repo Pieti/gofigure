@@ -1,4 +1,4 @@
-package sort
+package main
 
 func qs(data *[]int, left, right int) {
 	if left >= right {

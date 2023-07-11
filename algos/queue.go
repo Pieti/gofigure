@@ -1,4 +1,4 @@
-package lists
+package main
 
 type QNode struct {
 	value any
@@ -13,6 +13,10 @@ type Queue struct {
 
 func NewQueue() *Queue {
 	return &Queue{}
+}
+
+func (q *Queue) IsEmpty() bool {
+	return q.size == 0
 }
 
 func (q *Queue) Enqueue(value any) {
