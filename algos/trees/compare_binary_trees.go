@@ -1,4 +1,4 @@
-package main
+package trees
 
 func CompareBinaryTrees(a *BinaryNode, b *BinaryNode) bool {
 	if a == nil && b == nil {

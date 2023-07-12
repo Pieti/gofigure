@@ -1,4 +1,4 @@
-package main
+package trees
 
 func BreadthFirstSearch(head *BinaryNode, needle int) bool {
 	ch := make(chan *BinaryNode, 100)
