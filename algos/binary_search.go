@@ -1,4 +1,4 @@
-package search
+package main
 
 func BinarySearch(haystack []int, needle int) int {
 	low := 0
