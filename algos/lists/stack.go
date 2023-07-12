@@ -1,4 +1,4 @@
-package main
+package lists
 
 type SNode struct {
 	value any

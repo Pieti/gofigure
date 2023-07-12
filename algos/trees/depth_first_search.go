@@ -1,4 +1,4 @@
-package main
+package trees
 
 func depthFirstSearch(head *BinaryNode, needle int) bool {
 	if head == nil {
