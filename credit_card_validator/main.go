@@ -22,30 +22,20 @@ func init() {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", index)
+	mux.HandleFunc("POST /{$}", index)
 	err := http.ListenAndServe(":8080", mux)
 	log.Fatal(err)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		tpl.ExecuteTemplate(w, "index.gohtml", nil)
-		return
+	cardNumber := r.FormValue("card_number")
+	valid := luhn.Validate(cardNumber)
+
+	card := CreditCard{
+		Number: cardNumber,
+		Name:   r.FormValue("card_holder"),
+		Expiry: r.FormValue("expiry"),
+		Valid:  valid,
 	}
-
-	if r.Method == http.MethodPost {
-		cardNumber := r.FormValue("card_number")
-		valid := luhn.Validate(cardNumber)
-
-		card := CreditCard{
-			Number: cardNumber,
-			Name:   r.FormValue("card_holder"),
-			Expiry: r.FormValue("expiry"),
-			Valid:  valid,
-		}
-		tpl.ExecuteTemplate(w, "index.gohtml", card)
-		return
-	}
-
-	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	tpl.ExecuteTemplate(w, "index.gohtml", card)
 }
