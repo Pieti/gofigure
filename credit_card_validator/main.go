@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/pieti/gofigure/credit_card_validator/luhn"
 	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -20,8 +21,10 @@ func init() {
 }
 
 func main() {
-	http.HandleFunc("/", index)
-	http.ListenAndServe(":8080", nil)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", index)
+	err := http.ListenAndServe(":8080", mux)
+	log.Fatal(err)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
