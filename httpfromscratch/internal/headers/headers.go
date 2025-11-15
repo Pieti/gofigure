@@ -3,14 +3,57 @@ package headers
 import (
 	"bytes"
 	"fmt"
+	"strings"
 )
 
-type Headers map[string]string
+type Headers struct {
+	headers map[string]string
+}
 
 var rn = []byte("\r\n")
 
-func NewHeaders() Headers {
-	return make(Headers)
+func NewHeaders() *Headers {
+	return &Headers{
+		headers: make(map[string]string),
+	}
+}
+
+func (h Headers) Get(name string) string {
+	value, _ := h.headers[strings.ToLower(name)]
+	return value
+}
+
+func (h *Headers) Set(name, value string) {
+	name = strings.ToLower(name)
+	existing := h.Get(name)
+	if existing != "" {
+		value = existing + ", " + value
+	}
+	h.headers[strings.ToLower(name)] = value
+}
+
+func isToken(b []byte) bool {
+	specials := map[byte]bool{
+		'!': true, '#': true, '$': true, '%': true, '&': true, '\'': true,
+		'*': true, '+': true, '-': true, '.': true, '^': true, '_': true,
+		'`': true, '|': true, '~': true,
+	}
+
+	for _, c := range b {
+		switch {
+		case c >= 'A' && c <= 'Z':
+			continue
+		case c >= 'a' && c <= 'z':
+			continue
+		case c >= '0' && c <= '9':
+			continue
+		case specials[c]:
+			continue
+		default:
+			return false
+		}
+	}
+	return true
 }
 
 func parseHeader(fieldLine []byte) (string, string, error) {
@@ -25,8 +68,11 @@ func parseHeader(fieldLine []byte) (string, string, error) {
 	if bytes.HasSuffix(name, []byte(" ")) {
 		return "", "", fmt.Errorf("malformed header: invalid spacing in name")
 	}
+	if !isToken(name) {
+		return "", "", fmt.Errorf("malformed header: invalid characters in name")
+	}
 
-	return string(name), string(value), nil
+	return strings.ToLower(string(name)), string(value), nil
 }
 
 func (h Headers) Parse(data []byte) (int, bool, error) {
@@ -49,7 +95,7 @@ func (h Headers) Parse(data []byte) (int, bool, error) {
 			return 0, false, err
 		}
 		read += idx + len(rn)
-		h[name] = value
+		h.Set(name, value)
 	}
 
 	return read, done, nil
